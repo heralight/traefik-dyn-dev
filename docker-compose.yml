@@ -1,0 +1,48 @@
+version: '3'
+services:
+
+  traefik:
+    restart: unless-stopped
+    image: "traefik:v2.10.1"
+    ports:
+      - "80:80"
+      - "443:443"
+    labels:
+      - "traefik.http.routers.dashboard.rule=Host(`dashboard.traefik.me`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.entrypoints=http"
+      - "traefik.http.middlewares.dashboard-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.dashboard-secure.entrypoints=https"
+      - "traefik.http.routers.dashboard-secure.rule=Host(`dashboard.traefik.me`)"
+      - "traefik.http.routers.dashboard-secure.tls.domains[0].main=dashboard.traefik.me"
+      - "traefik.http.routers.dashboard-secure.service=api@internal"
+    volumes:
+      - ./traefik.yml:/etc/traefik/traefik.yml
+      - ./tls.yml:/etc/traefik/tls.yml
+      - /var/run/docker.sock:/var/run/docker.sock 
+      - ./data/certs/:/etc/ssl/traefik
+  app1:
+    image: containous/whoami
+    labels:
+      - "traefik.http.routers.app1.rule=Host(`app1.traefik.me`)"
+      - "traefik.http.routers.app1-tls.tls.domains[0].main=app1.traefik.me"
+      - "traefik.http.routers.app1-tls.tls.domains[0].sans=app1-*.traefik.me"
+  app2:
+    image: containous/whoami
+    labels:
+      - "traefik.http.routers.app2.rule=Host(`app2.traefik.me`)"
+      - "traefik.http.routers.app2-tls.tls.domains[0].main=app2.traefik.me"
+      - "traefik.http.routers.app2-tls.tls.domains[0].sans=app2-*.traefik.me"
+
+  reverse-proxy-https-helper:
+    image: alpine
+    command: sh -c "cd /etc/ssl/traefik
+      && wget traefik.me/cert.pem -O cert.pem
+      && wget traefik.me/privkey.pem -O privkey.pem"
+    volumes:
+      - ./data/certs/:/etc/ssl/traefik
+
+networks:
+  default:
+    name: gtw
+  gtw:
