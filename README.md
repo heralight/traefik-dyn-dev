@@ -2,12 +2,12 @@
 
 A fork of [Pyru Gist](https://gist.github.com/pyrou/4f555cd55677331c742742ee6007a73a) with some mods that allow you to have local services accessible by myservice.traefik.me with let's encrypt ssl without any system modification.
 
-[Traefik.me](https://traefik.me/) is a service like https://nip.io/ or https://xip.io/ 
+[Traefik.me](https://traefik.me/) is a service like [nip.io](https://nip.io/) or [xip.io](https://xip.io/) 
 
 Thanks to [Pyru](https://github.com/pyrou) the source code is accessible at:
 
-https://github.com/pyrou/traefik.me
-https://gist.github.com/pyrou/4f555cd55677331c742742ee6007a73a
+- https://github.com/pyrou/traefik.me
+- https://gist.github.com/pyrou/4f555cd55677331c742742ee6007a73a
 
 ## What ?
 
