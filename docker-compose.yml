@@ -16,6 +16,9 @@ services:
       - "traefik.http.routers.dashboard-secure.rule=Host(`dashboard.traefik.me`)"
       - "traefik.http.routers.dashboard-secure.tls.domains[0].main=dashboard.traefik.me"
       - "traefik.http.routers.dashboard-secure.service=api@internal"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.port=443"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
     volumes:
       - ./traefik.yml:/etc/traefik/traefik.yml
       - ./tls.yml:/etc/traefik/tls.yml
@@ -32,5 +35,4 @@ services:
 
 networks: 
   default: 
-    external: 
       name: gtw
