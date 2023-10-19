@@ -21,18 +21,6 @@ services:
       - ./tls.yml:/etc/traefik/tls.yml
       - /var/run/docker.sock:/var/run/docker.sock 
       - ./data/certs/:/etc/ssl/traefik
-  app1:
-    image: containous/whoami
-    labels:
-      - "traefik.http.routers.app1.rule=Host(`app1.traefik.me`)"
-      - "traefik.http.routers.app1-tls.tls.domains[0].main=app1.traefik.me"
-      - "traefik.http.routers.app1-tls.tls.domains[0].sans=app1-*.traefik.me"
-  app2:
-    image: containous/whoami
-    labels:
-      - "traefik.http.routers.app2.rule=Host(`app2.traefik.me`)"
-      - "traefik.http.routers.app2-tls.tls.domains[0].main=app2.traefik.me"
-      - "traefik.http.routers.app2-tls.tls.domains[0].sans=app2-*.traefik.me"
 
   reverse-proxy-https-helper:
     image: alpine
@@ -42,7 +30,7 @@ services:
     volumes:
       - ./data/certs/:/etc/ssl/traefik
 
-networks:
-  default:
-    name: gtw
-  gtw:
+networks: 
+  default: 
+    external: 
+      name: gtw
